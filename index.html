@@ -1,0 +1,2196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NCL Industries Limited – Employee Management System (EMS)</title>
+  <meta name="description" content="NCL Industries Limited – Employee Management System (EMS). Empowering People. Enhancing Performance.">
+  <!-- Embedded SVG Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23C8102E'/%3E%3Cpath d='M14 50 L14 14 L24 14 L40 38 L40 14 L50 14 L50 50 L40 50 L24 26 L24 50 Z' fill='%23FFFFFF'/%3E%3C/svg%3E">
+  
+  <style>
+    /* ==========================================================================
+       NCL Industries Limited – EMS Corporate Industrial Theme
+       Colors: Red (#C8102E), Charcoal (#181C20), White, Neutral Gray
+       ========================================================================== */
+    :root {
+      --primary-red: #C8102E;
+      --primary-red-dark: #9E0D22;
+      --primary-red-light: #FEE2E2;
+      --primary-red-hover: #B30E28;
+      --charcoal-900: #111418;
+      --charcoal-800: #181C20;
+      --charcoal-700: #222831;
+      --charcoal-600: #323842;
+      --gray-50: #F9FAFB;
+      --gray-100: #F3F4F6;
+      --gray-200: #E5E7EB;
+      --gray-300: #D1D5DB;
+      --gray-400: #9CA3AF;
+      --gray-500: #6B7280;
+      --gray-600: #4B5563;
+      --gray-700: #374151;
+      --white: #FFFFFF;
+      --success: #10B981;
+      --success-light: #ECFDF5;
+      --warning: #F59E0B;
+      --warning-light: #FFFBEB;
+      --danger: #EF4444;
+      --danger-light: #FEF2F2;
+      --font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --transition: all 0.2s ease-in-out;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-family);
+      background-color: #F4F6F9;
+      color: var(--charcoal-800);
+      line-height: 1.5;
+      font-size: 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    #app-container { display: flex; min-height: 100vh; }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 270px;
+      background-color: var(--charcoal-800);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; bottom: 0; left: 0;
+      z-index: 100;
+      transition: transform 0.3s ease;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.15);
+    }
+    .sidebar-header {
+      padding: 20px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      background: var(--charcoal-900);
+    }
+    .brand-wrapper { display: flex; flex-direction: column; gap: 6px; }
+    .brand-logo-area { display: flex; align-items: center; gap: 12px; }
+    .logo-badge {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+      color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 20px;
+      border-radius: var(--radius-sm);
+      letter-spacing: 0.5px;
+      box-shadow: 0 2px 6px rgba(200, 16, 46, 0.4);
+      flex-shrink: 0;
+    }
+    .brand-text { display: flex; flex-direction: column; }
+    .company-name-bold {
+      font-size: 15px; font-weight: 800; color: var(--white);
+      letter-spacing: 0.5px; line-height: 1.2;
+    }
+    .system-title-sub { font-size: 11px; font-weight: 600; color: var(--gray-400); letter-spacing: 0.3px; }
+    .company-tagline-micro {
+      font-size: 9.5px; color: #E2E8F0; font-style: italic;
+      padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 4px;
+    }
+
+    .sidebar-nav { flex: 1; padding: 16px 12px; overflow-y: auto; }
+    .nav-section-title {
+      font-size: 10px; text-transform: uppercase; color: var(--gray-400);
+      font-weight: 700; letter-spacing: 1.2px; padding: 12px 10px 6px 10px;
+    }
+    .nav-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 14px; color: var(--gray-300);
+      text-decoration: none; border-radius: var(--radius-md);
+      margin-bottom: 4px; font-weight: 500; font-size: 13.5px;
+      cursor: pointer; transition: var(--transition);
+    }
+    .nav-item:hover { background-color: rgba(255, 255, 255, 0.08); color: var(--white); }
+    .nav-item.active {
+      background-color: var(--primary-red); color: var(--white);
+      font-weight: 600; box-shadow: 0 2px 6px rgba(200, 16, 46, 0.35);
+    }
+    .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; stroke-width: 2; }
+    .nav-item .badge {
+      margin-left: auto; padding: 2px 6px; border-radius: 10px;
+      font-size: 10px; font-weight: 700; background: rgba(255, 255, 255, 0.2);
+    }
+
+    .sidebar-footer {
+      padding: 14px 16px; background: var(--charcoal-900);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .user-mini-card { display: flex; align-items: center; gap: 10px; overflow: hidden; }
+    .user-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--primary-red); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 13px; flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+    .user-meta { display: flex; flex-direction: column; overflow: hidden; }
+    .user-meta .name {
+      font-size: 13px; font-weight: 600; color: var(--white);
+      white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
+    }
+    .user-meta .role-pill { font-size: 10px; color: #CBD5E1; text-transform: uppercase; }
+    .btn-icon-logout {
+      background: transparent; border: none; color: var(--gray-400);
+      cursor: pointer; padding: 6px; border-radius: var(--radius-sm);
+    }
+    .btn-icon-logout:hover { background: rgba(200, 16, 46, 0.25); color: #FF6B6B; }
+
+    /* MAIN WRAPPER */
+    .main-wrapper {
+      flex: 1; margin-left: 270px; display: flex; flex-direction: column; min-height: 100vh;
+    }
+    .top-header {
+      height: 70px; background: var(--white); border-bottom: 1px solid var(--gray-200);
+      display: flex; align-items: center; justify-content: space-between; padding: 0 28px;
+      position: sticky; top: 0; z-index: 90; box-shadow: var(--shadow-sm);
+    }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .menu-toggle-btn { display: none; background: none; border: none; cursor: pointer; color: var(--charcoal-700); }
+    .header-title-block h1 { font-size: 17px; font-weight: 700; color: var(--charcoal-800); }
+    .header-title-block .tagline { font-size: 11.5px; color: var(--primary-red); font-weight: 600; }
+    .header-right { display: flex; align-items: center; gap: 14px; }
+    .corporate-unit-badge {
+      display: flex; align-items: center; gap: 8px; padding: 6px 12px;
+      background: var(--gray-100); border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+      font-size: 11.5px; font-weight: 600; color: var(--charcoal-700);
+    }
+    .status-indicator-dot {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--success);
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    .content-body { flex: 1; padding: 24px 28px; }
+    .view-panel { display: none; }
+    .view-panel.active { display: block; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    /* STATS & CARDS */
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px; margin-bottom: 24px;
+    }
+    .stat-card {
+      background: var(--white); border-radius: var(--radius-md); padding: 18px 20px;
+      box-shadow: var(--shadow-sm); border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--primary-red);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .stat-card.accent-charcoal { border-left-color: var(--charcoal-700); }
+    .stat-card.accent-green { border-left-color: var(--success); }
+    .stat-card.accent-amber { border-left-color: var(--warning); }
+    .stat-info .label { font-size: 12px; color: var(--gray-500); font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+    .stat-info .value { font-size: 26px; font-weight: 800; color: var(--charcoal-800); }
+    .stat-info .sub-desc { font-size: 11px; color: var(--gray-400); margin-top: 4px; }
+    .stat-icon {
+      width: 48px; height: 48px; border-radius: var(--radius-md);
+      background: var(--gray-50); border: 1px solid var(--gray-200);
+      display: flex; align-items: center; justify-content: center; color: var(--charcoal-700);
+    }
+
+    .card {
+      background: var(--white); border-radius: var(--radius-md);
+      border: 1px solid var(--gray-200); box-shadow: var(--shadow-sm); margin-bottom: 24px; overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--gray-200);
+      display: flex; align-items: center; justify-content: space-between; background: #FCFCFD;
+    }
+    .card-title-group { display: flex; align-items: center; gap: 10px; }
+    .card-title-group h2 { font-size: 15px; font-weight: 700; color: var(--charcoal-800); }
+    .card-title-group .badge-tag {
+      font-size: 10px; padding: 2px 8px; background: var(--primary-red-light);
+      color: var(--primary-red); font-weight: 700; border-radius: 4px;
+    }
+    .card-actions { display: flex; align-items: center; gap: 10px; }
+    .card-body { padding: 20px; }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 16px; font-size: 13px; font-weight: 600;
+      border-radius: var(--radius-sm); cursor: pointer; border: 1px solid transparent;
+      text-decoration: none; transition: var(--transition);
+    }
+    .btn-primary { background: var(--primary-red); color: var(--white); }
+    .btn-primary:hover { background: var(--primary-red-hover); box-shadow: 0 2px 6px rgba(200, 16, 46, 0.3); }
+    .btn-secondary { background: var(--charcoal-700); color: var(--white); }
+    .btn-secondary:hover { background: var(--charcoal-800); }
+    .btn-outline { background: transparent; border-color: var(--gray-300); color: var(--charcoal-700); }
+    .btn-outline:hover { background: var(--gray-100); }
+    .btn-outline-red { background: transparent; border-color: var(--primary-red); color: var(--primary-red); }
+    .btn-outline-red:hover { background: var(--primary-red-light); }
+    .btn-sm { padding: 5px 10px; font-size: 11.5px; }
+    .btn-success { background: var(--success); color: var(--white); }
+    .btn-danger { background: var(--danger); color: var(--white); }
+
+    /* FORMS */
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 12px; font-weight: 600; color: var(--charcoal-700); margin-bottom: 6px; }
+    .form-control, .form-select {
+      width: 100%; padding: 8px 12px; font-size: 13px; font-family: inherit;
+      border: 1px solid var(--gray-300); border-radius: var(--radius-sm); background: var(--white);
+    }
+    .form-control:focus, .form-select:focus { outline: none; border-color: var(--primary-red); }
+    .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    /* TABLE */
+    .table-responsive { width: 100%; overflow-x: auto; }
+    .corporate-table { width: 100%; border-collapse: collapse; text-align: left; }
+    .corporate-table th {
+      background: #F8FAFC; padding: 12px 14px; font-size: 11px; font-weight: 700;
+      text-transform: uppercase; color: var(--gray-600); border-bottom: 2px solid var(--gray-200);
+      white-space: nowrap;
+    }
+    .corporate-table td { padding: 12px 14px; font-size: 12.5px; border-bottom: 1px solid var(--gray-200); }
+    .corporate-table tbody tr:hover { background-color: #F8FAFC; }
+
+    /* STATUS PILLS */
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; line-height: 1;
+    }
+    .status-pill.present, .status-pill.approved, .status-pill.paid, .status-pill.active {
+      background: var(--success-light); color: #065F46; border: 1px solid #A7F3D0;
+    }
+    .status-pill.late, .status-pill.pending, .status-pill.processing {
+      background: var(--warning-light); color: #92400E; border: 1px solid #FDE68A;
+    }
+    .status-pill.absent, .status-pill.rejected, .status-pill.resigned {
+      background: var(--danger-light); color: #991B1B; border: 1px solid #FECACA;
+    }
+    .status-pill.halfday, .status-pill.onleave { background: #EFF6FF; color: #1E40AF; border: 1px solid #BFDBFE; }
+
+    /* LOGIN MODAL */
+    #login-modal-overlay {
+      position: fixed; inset: 0;
+      background: linear-gradient(135deg, rgba(24, 28, 32, 0.96) 0%, rgba(17, 20, 24, 0.98) 100%);
+      display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px;
+    }
+    .login-box {
+      width: 100%; max-width: 480px; background: var(--white);
+      border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); overflow: hidden;
+    }
+    .login-header {
+      background: var(--charcoal-900); padding: 32px 30px 24px 30px;
+      text-align: center; border-bottom: 3px solid var(--primary-red);
+    }
+    .login-logo-container { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 8px; }
+    .login-badge {
+      width: 52px; height: 52px; background: linear-gradient(135deg, var(--primary-red) 0%, var(--primary-red-dark) 100%);
+      color: var(--white); display: flex; align-items: center; justify-content: center;
+      font-weight: 900; font-size: 24px; border-radius: var(--radius-sm);
+    }
+    .login-company-title { color: var(--white); font-size: 20px; font-weight: 800; }
+    .login-sub-title { color: var(--gray-300); font-size: 13px; }
+    .login-tagline-quote { color: #F87171; font-size: 11.5px; font-style: italic; margin-top: 8px; }
+    .login-body { padding: 30px; }
+    .role-switcher-helper {
+      margin-top: 24px; padding: 14px; background: var(--gray-100);
+      border-radius: var(--radius-md); border: 1px solid var(--gray-200);
+    }
+    .role-switcher-title {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      color: var(--gray-600); margin-bottom: 8px; text-align: center;
+    }
+    .quick-role-buttons { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .btn-role-quick {
+      padding: 6px 4px; font-size: 11px; font-weight: 600; border: 1px solid var(--gray-300);
+      background: var(--white); color: var(--charcoal-700); border-radius: var(--radius-sm);
+      cursor: pointer; text-align: center;
+    }
+    .btn-role-quick:hover { background: var(--primary-red); color: var(--white); border-color: var(--primary-red); }
+
+    /* ID BADGE */
+    .id-card-stage { display: flex; justify-content: center; padding: 20px 0; }
+    .ncl-corporate-badge {
+      width: 320px; height: 490px; background: var(--white);
+      border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border: 1px solid var(--gray-300); display: flex; flex-direction: column; overflow: hidden;
+    }
+    .badge-lanyard-slot {
+      width: 50px; height: 6px; background: var(--gray-300); border-radius: 4px; margin: 10px auto 4px auto;
+    }
+    .badge-header {
+      background: var(--charcoal-900); color: var(--white); padding: 12px 16px; text-align: center;
+      border-bottom: 3px solid var(--primary-red);
+    }
+    .badge-company { font-size: 14px; font-weight: 800; letter-spacing: 0.5px; }
+    .badge-sub { font-size: 9px; color: var(--gray-400); text-transform: uppercase; }
+    .badge-photo-area {
+      display: flex; flex-direction: column; align-items: center; padding: 16px 16px 10px 16px;
+      background: linear-gradient(180deg, #F8FAFC 0%, var(--white) 100%);
+    }
+    .badge-avatar-frame {
+      width: 90px; height: 90px; border-radius: 12px; background: var(--charcoal-700);
+      border: 3px solid var(--primary-red); display: flex; align-items: center; justify-content: center;
+      font-size: 30px; font-weight: 800; color: var(--white); margin-bottom: 8px;
+    }
+    .badge-emp-name { font-size: 16px; font-weight: 800; color: var(--charcoal-900); text-align: center; }
+    .badge-emp-designation { font-size: 11px; font-weight: 600; color: var(--primary-red); text-align: center; }
+    .badge-emp-id-pill {
+      display: inline-block; margin-top: 6px; background: var(--charcoal-800);
+      color: var(--white); font-size: 11px; font-weight: 700; padding: 2px 10px; border-radius: 10px;
+    }
+    .badge-details-grid { padding: 12px 20px; flex: 1; font-size: 11px; }
+    .badge-detail-row {
+      display: flex; justify-content: space-between; margin-bottom: 6px; border-bottom: 1px dashed var(--gray-200); padding-bottom: 3px;
+    }
+    .badge-footer { background: var(--gray-100); border-top: 1px solid var(--gray-200); padding: 8px 16px; text-align: center; }
+    .badge-barcode { font-family: monospace; font-size: 14px; letter-spacing: 4px; font-weight: bold; }
+    .badge-footer-tagline { font-size: 8px; color: var(--gray-600); font-weight: 600; margin-top: 2px; }
+
+    /* SALARY SLIP */
+    .payslip-document {
+      max-width: 800px; margin: 0 auto; background: var(--white);
+      border: 1px solid var(--gray-300); border-radius: var(--radius-sm); padding: 30px; box-shadow: var(--shadow-md);
+    }
+    .payslip-header-table { width: 100%; border-bottom: 2px solid var(--primary-red); padding-bottom: 14px; margin-bottom: 16px; }
+    .payslip-company-title { font-size: 20px; font-weight: 900; color: var(--charcoal-900); }
+    .payslip-company-address { font-size: 11px; color: var(--gray-600); line-height: 1.4; }
+    .payslip-title-banner {
+      text-align: center; background: var(--gray-100); padding: 6px; font-weight: 700; font-size: 13px;
+      color: var(--charcoal-800); margin-bottom: 16px; border: 1px solid var(--gray-200); text-transform: uppercase;
+    }
+    .payslip-info-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; font-size: 12px;
+      background: #FCFCFD; padding: 12px 16px; border: 1px solid var(--gray-200);
+    }
+    .info-field { display: flex; margin-bottom: 4px; }
+    .info-field .lbl { width: 140px; color: var(--gray-600); font-weight: 600; }
+    .info-field .val { flex: 1; font-weight: 700; color: var(--charcoal-800); }
+    .payslip-breakdown-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+    .payslip-breakdown-table th { background: var(--charcoal-800); color: var(--white); padding: 8px 12px; font-size: 11.5px; }
+    .payslip-breakdown-table td { border: 1px solid var(--gray-200); padding: 8px 12px; font-size: 12px; }
+    .payslip-total-row { background: var(--gray-100); font-weight: bold; }
+    .net-pay-banner {
+      background: var(--primary-red-light); border: 1px solid #FECACA; border-left: 4px solid var(--primary-red);
+      padding: 12px 16px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .net-pay-banner .amount { font-size: 18px; font-weight: 800; color: var(--primary-red-dark); }
+    .payslip-sign-footer { display: flex; justify-content: space-between; margin-top: 40px; font-size: 11px; }
+    .payslip-sign-block { text-align: center; width: 220px; }
+    .payslip-sign-line { border-top: 1px solid var(--charcoal-800); margin-top: 36px; padding-top: 4px; font-weight: 700; }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(17, 20, 24, 0.7); display: none;
+      align-items: center; justify-content: center; z-index: 500; padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-container {
+      background: var(--white); border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+      width: 100%; max-width: 650px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .modal-container.modal-lg { max-width: 900px; }
+    .modal-header {
+      padding: 16px 20px; background: var(--charcoal-900); color: var(--white);
+      display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid var(--primary-red);
+    }
+    .modal-close-btn { background: none; border: none; color: var(--gray-400); font-size: 20px; cursor: pointer; }
+    .modal-close-btn:hover { color: var(--white); }
+    .modal-body { padding: 20px; overflow-y: auto; }
+    .modal-footer {
+      padding: 12px 20px; background: var(--gray-50); border-top: 1px solid var(--gray-200);
+      display: flex; justify-content: flex-end; gap: 10px;
+    }
+
+    #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 8px; }
+    .toast {
+      background: var(--charcoal-900); color: var(--white); padding: 12px 18px; border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-lg); font-size: 13px; border-left: 4px solid var(--primary-red); min-width: 280px; max-width: 420px;
+    }
+    .toast.toast-success { border-left-color: var(--success); }
+    .toast.toast-error { border-left-color: var(--danger); }
+
+    @media print {
+      body { background: transparent !important; color: #000 !important; }
+      .sidebar, .top-header, .btn, .card-actions, .no-print, #toast-container, .modal-close-btn { display: none !important; }
+      .main-wrapper { margin-left: 0 !important; width: 100% !important; }
+      .content-body { padding: 0 !important; }
+      .payslip-document { border: none !important; box-shadow: none !important; padding: 0 !important; }
+      .ncl-corporate-badge { box-shadow: none !important; border: 1px solid #000 !important; margin: 20px auto !important; }
+    }
+
+    @media (max-width: 1024px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.mobile-open { transform: translateX(0); }
+      .main-wrapper { margin-left: 0; }
+      .menu-toggle-btn { display: block; }
+      .top-header { padding: 0 16px; }
+      .content-body { padding: 16px; }
+      .form-grid-2, .form-grid-3 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN MODAL OVERLAY -->
+  <div id="login-modal-overlay">
+    <div class="login-box">
+      <div class="login-header">
+        <div class="login-logo-container">
+          <div class="login-badge">NCL</div>
+          <div>
+            <div class="login-company-title">NCL Industries Limited</div>
+            <div class="login-sub-title">Employee Management System (EMS)</div>
+          </div>
+        </div>
+        <div class="login-tagline-quote">“Empowering People. Enhancing Performance.”</div>
+      </div>
+
+      <div class="login-body">
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label" for="login-username">Employee ID / Official Email</label>
+            <input type="text" id="login-username" class="form-control" placeholder="e.g. admin, NCL-1001, or email" required autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="login-password">Password</label>
+            <input type="password" id="login-password" class="form-control" placeholder="Enter secure password" required autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; padding: 10px; margin-top: 8px;">
+            Secure Corporate Sign-In
+          </button>
+        </form>
+
+        <div class="role-switcher-helper">
+          <div class="role-switcher-title">Select Demo Corporate Role (1-Click Fill)</div>
+          <div class="quick-role-buttons">
+            <button type="button" class="btn-role-quick" onclick="quickFillRole('admin', 'admin123')">
+              <strong>Admin</strong><br><small>Executive</small>
+            </button>
+            <button type="button" class="btn-role-quick" onclick="quickFillRole('hr', 'hr123')">
+              <strong>HR Head</strong><br><small>Corporate</small>
+            </button>
+            <button type="button" class="btn-role-quick" onclick="quickFillRole('manager', 'manager123')">
+              <strong>Manager</strong><br><small>Plant Ops</small>
+            </button>
+            <button type="button" class="btn-role-quick" onclick="quickFillRole('employee', 'emp123')">
+              <strong>Employee</strong><br><small>Engineer</small>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN APPLICATION LAYOUT -->
+  <div id="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="app-sidebar">
+      <div class="sidebar-header">
+        <div class="brand-wrapper">
+          <div class="brand-logo-area">
+            <div class="logo-badge">NCL</div>
+            <div class="brand-text">
+              <span class="company-name-bold">NCL Industries Limited</span>
+              <span class="system-title-sub">Employee Management System</span>
+            </div>
+          </div>
+          <div class="company-tagline-micro">“Empowering People. Enhancing Performance.”</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-title">Core Operations</div>
+        <a class="nav-item active" data-view="dashboard" onclick="switchView('dashboard')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-item" data-view="employees" onclick="switchView('employees')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          <span>Employee Directory</span>
+        </a>
+        <a class="nav-item" data-view="attendance" onclick="switchView('attendance')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>Attendance & Shifts</span>
+        </a>
+        <a class="nav-item" data-view="leaves" onclick="switchView('leaves')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          <span>Leave Management</span>
+          <span class="badge" id="sidebar-leave-badge">0</span>
+        </a>
+
+        <div class="nav-section-title">Finance & Compensation</div>
+        <a class="nav-item" data-view="payroll" onclick="switchView('payroll')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          <span>Payroll & Salary Slips</span>
+        </a>
+        <a class="nav-item" data-view="idcards" onclick="switchView('idcards')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          <span>Employee ID Badges</span>
+        </a>
+
+        <div class="nav-section-title">Growth & Governance</div>
+        <a class="nav-item" data-view="performance" onclick="switchView('performance')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+          <span>Performance & KPIs</span>
+        </a>
+        <a class="nav-item" data-view="announcements" onclick="switchView('announcements')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span>Announcements</span>
+        </a>
+        <a class="nav-item" data-view="reports" onclick="switchView('reports')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+          <span>Official Reports & Export</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-mini-card">
+          <div class="user-avatar" id="sidebar-user-avatar">NC</div>
+          <div class="user-meta">
+            <div class="name" id="sidebar-user-name">Loading...</div>
+            <div class="role-pill" id="sidebar-user-role">Role</div>
+          </div>
+        </div>
+        <button class="btn-icon-logout" onclick="logoutUser()" title="Sign Out">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <main class="main-wrapper">
+
+      <!-- TOP HEADER -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="menu-toggle-btn" onclick="toggleMobileSidebar()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </button>
+          <div class="header-title-block">
+            <h1 id="page-header-title">NCL Industries Limited – Employee Management System (EMS)</h1>
+            <div class="tagline">“Empowering People. Enhancing Performance.”</div>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <div class="corporate-unit-badge">
+            <span class="status-indicator-dot"></span>
+            <span id="header-unit-label">NCL Industrial Portal • Live</span>
+          </div>
+
+          <!-- Quick Punch Action Button -->
+          <div id="quick-punch-container">
+            <button class="btn btn-outline-red btn-sm" onclick="clockInOut('in')" id="btn-quick-clockin">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>Clock In</span>
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="clockInOut('out')" id="btn-quick-clockout" style="display:none;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
+              <span>Clock Out</span>
+            </button>
+          </div>
+
+          <button class="btn btn-sm btn-outline" onclick="logoutUser()" title="Logout">
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT BODY -->
+      <div class="content-body">
+
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard" class="view-panel active">
+          
+          <div class="card" style="background: linear-gradient(90deg, #181C20 0%, #222831 60%, #C8102E 100%); color: white; border: none; margin-bottom: 20px;">
+            <div class="card-body" style="padding: 24px 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+              <div>
+                <span class="badge" style="background: var(--primary-red); color: white; font-size: 11px; padding: 4px 8px; border-radius: 4px; text-transform: uppercase;">
+                  Industrial Operating Matrix
+                </span>
+                <h2 style="font-size: 22px; font-weight: 800; margin-top: 6px;" id="dash-welcome-text">
+                  Welcome to NCL Industries Limited EMS
+                </h2>
+                <p style="color: #D1D5DB; font-size: 13px; max-width: 650px; margin-top: 4px;">
+                  Real-time workforce deployment across Nagarjuna Cement Works, Bison Panel Facilities, Prefab Structural Divisions, and Corporate Headquarters.
+                </p>
+              </div>
+              <div style="text-align: right;">
+                <div style="font-size: 11px; color: #9CA3AF; text-transform: uppercase;">Current System Time</div>
+                <div style="font-size: 20px; font-weight: 800; color: #FFFFFF;" id="live-clock-display">--:--:--</div>
+                <div style="font-size: 11px; color: #FCA5A5; font-weight: 600;">NCL Industrial Shift: Active</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats Cards -->
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-info">
+                <div class="label">Total Workforce</div>
+                <div class="value" id="stat-total-emp">10</div>
+                <div class="sub-desc">Active NCL Personnel</div>
+              </div>
+              <div class="stat-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path></svg>
+              </div>
+            </div>
+
+            <div class="stat-card accent-green">
+              <div class="stat-info">
+                <div class="label">Present Today</div>
+                <div class="value" id="stat-present-today" style="color: var(--success);">7</div>
+                <div class="sub-desc">Plant & Office Verified</div>
+              </div>
+              <div class="stat-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+              </div>
+            </div>
+
+            <div class="stat-card accent-amber">
+              <div class="stat-info">
+                <div class="label">Pending Leaves</div>
+                <div class="value" id="stat-pending-leaves" style="color: var(--warning);">2</div>
+                <div class="sub-desc">Awaiting Action</div>
+              </div>
+              <div class="stat-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line></svg>
+              </div>
+            </div>
+
+            <div class="stat-card accent-charcoal">
+              <div class="stat-info">
+                <div class="label">Monthly Payroll</div>
+                <div class="value" id="stat-monthly-payroll">₹ 11,63,710</div>
+                <div class="sub-desc">October 2026 Disbursed</div>
+              </div>
+              <div class="stat-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dashboard Widgets -->
+          <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h2>Official Announcements & Circulars</h2>
+                  <span class="badge-tag">NCL Corporate</span>
+                </div>
+                <button class="btn btn-outline btn-sm" onclick="switchView('announcements')">View All</button>
+              </div>
+              <div class="card-body" id="dash-announcements-list" style="padding: 12px 20px;"></div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title-group">
+                  <h2>Workforce by Industrial Division</h2>
+                </div>
+              </div>
+              <div class="card-body" id="dash-divisions-breakdown"></div>
+            </div>
+          </div>
+
+          <!-- Shift Attendance Logs -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Today's Shift Attendance Logs</h2>
+                <span class="badge-tag">Real-Time</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-primary btn-sm" onclick="switchView('attendance')">Open Full Register</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="corporate-table" id="dash-attendance-table">
+                <thead>
+                  <tr>
+                    <th>Emp ID</th>
+                    <th>Employee Name</th>
+                    <th>Division & Plant</th>
+                    <th>Designation</th>
+                    <th>Check In</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- EMPLOYEE DIRECTORY VIEW -->
+        <section id="view-employees" class="view-panel">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>NCL Industries Limited – Employee Master Directory</h2>
+                <span class="badge-tag" id="emp-count-badge">10 Personnel</span>
+              </div>
+              <div class="card-actions">
+                <input type="text" id="emp-search-input" class="form-control" placeholder="Search by name, ID, title..." style="width: 220px;" oninput="filterEmployees()">
+                <select id="emp-dept-filter" class="form-select" style="width: 170px;" onchange="filterEmployees()">
+                  <option value="">All Departments</option>
+                  <option value="Executive Management">Executive Management</option>
+                  <option value="Human Resources">Human Resources</option>
+                  <option value="Plant Engineering">Plant Engineering</option>
+                  <option value="Production & Kiln Operations">Production & Kiln</option>
+                  <option value="Quality Control">Quality Control</option>
+                  <option value="Supply Chain">Supply Chain</option>
+                  <option value="Health, Safety & Environment">Safety & EHS</option>
+                </select>
+                <button class="btn btn-primary" onclick="openAddEmployeeModal()" id="btn-add-employee">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>Enroll Employee</span>
+                </button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="corporate-table" id="employees-table">
+                <thead>
+                  <tr>
+                    <th>Emp ID</th>
+                    <th>Employee Details</th>
+                    <th>Division & Plant</th>
+                    <th>Designation & Dept</th>
+                    <th>Contact</th>
+                    <th>Monthly CTC</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ATTENDANCE VIEW -->
+        <section id="view-attendance" class="view-panel">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Attendance & Shift Management</h2>
+                <span class="badge-tag">NCL Industrial Units</span>
+              </div>
+              <div class="card-actions">
+                <input type="date" id="att-date-picker" class="form-control" style="width: 160px;" onchange="renderAttendance()">
+                <button class="btn btn-outline" onclick="exportReport('attendance')">Export Shift Log (CSV)</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="corporate-table" id="full-attendance-table">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Emp ID</th>
+                    <th>Employee Name</th>
+                    <th>Division</th>
+                    <th>Shift</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Work Hours</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- LEAVES VIEW -->
+        <section id="view-leaves" class="view-panel">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Leave Applications & Approvals</h2>
+                <span class="badge-tag">NCL Leave Policy</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-primary" onclick="openApplyLeaveModal()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>Apply for Leave</span>
+                </button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="corporate-table" id="leaves-table">
+                <thead>
+                  <tr>
+                    <th>Application ID</th>
+                    <th>Emp ID & Name</th>
+                    <th>Leave Type</th>
+                    <th>Duration</th>
+                    <th>Days</th>
+                    <th>Reason</th>
+                    <th>Status</th>
+                    <th>Reviewed By</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- PAYROLL VIEW -->
+        <section id="view-payroll" class="view-panel">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Payroll Register & Salary Slips</h2>
+                <span class="badge-tag">NCL Industries Limited</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-outline" onclick="exportReport('payroll')">Export Payroll (CSV)</button>
+                <button class="btn btn-primary" onclick="generateMonthlyPayroll()" id="btn-generate-payroll">Generate Monthly Payroll</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="corporate-table" id="payroll-table">
+                <thead>
+                  <tr>
+                    <th>Slip Number</th>
+                    <th>Emp ID</th>
+                    <th>Employee Name</th>
+                    <th>Period</th>
+                    <th>Gross Salary</th>
+                    <th>Deductions</th>
+                    <th>Net Payable</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ID BADGES VIEW -->
+        <section id="view-idcards" class="view-panel">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>NCL Corporate Employee Identification Badges</h2>
+                <span class="badge-tag">Printable Standard</span>
+              </div>
+              <div class="card-actions">
+                <select id="id-card-selector" class="form-select" style="width: 260px;" onchange="renderSelectedIdCard()"></select>
+                <button class="btn btn-primary" onclick="window.print()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                  <span>Print ID Badge</span>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="id-card-stage" id="id-card-display-area"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PERFORMANCE VIEW -->
+        <section id="view-performance" class="view-panel">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Performance Appraisals & Operational KPIs</h2>
+                <span class="badge-tag">Evaluation Cycles</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-primary" onclick="openAddReviewModal()" id="btn-add-review">Submit Performance Appraisal</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="corporate-table" id="performance-table">
+                <thead>
+                  <tr>
+                    <th>Emp ID</th>
+                    <th>Employee Name</th>
+                    <th>Division</th>
+                    <th>Review Period</th>
+                    <th>Rating</th>
+                    <th>KPI Score</th>
+                    <th>Reviewer</th>
+                    <th>Feedback & Achievements</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ANNOUNCEMENTS VIEW -->
+        <section id="view-announcements" class="view-panel">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Corporate Notices & Safety Bulletins</h2>
+                <span class="badge-tag">NCL Communications</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-primary" onclick="openNewAnnouncementModal()" id="btn-create-announcement">Post New Notice</button>
+              </div>
+            </div>
+            <div class="card-body" id="full-announcements-list"></div>
+          </div>
+        </section>
+
+        <!-- REPORTS VIEW -->
+        <section id="view-reports" class="view-panel">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title-group">
+                <h2>Official Reports & Data Registers</h2>
+                <span class="badge-tag">Compliance & Audit</span>
+              </div>
+            </div>
+            <div class="card-body">
+              <p style="color: var(--gray-600); margin-bottom: 20px;">
+                Download complete verified operational registers for NCL Industries Limited. All exports include official company metadata, report timestamps, and compliance headers.
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px;">
+                <div style="border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 18px; background: #FCFCFD;">
+                  <h3 style="font-size: 14px; font-weight: 700; color: var(--charcoal-800); margin-bottom: 6px;">Master Employee Register</h3>
+                  <p style="font-size: 12px; color: var(--gray-500); margin-bottom: 14px;">Complete directory of all enrolled staff across Nagarjuna Cement, Bison Panel, and Corporate divisions.</p>
+                  <button class="btn btn-secondary btn-sm" onclick="exportReport('employees')">Download Register (.CSV)</button>
+                </div>
+
+                <div style="border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 18px; background: #FCFCFD;">
+                  <h3 style="font-size: 14px; font-weight: 700; color: var(--charcoal-800); margin-bottom: 6px;">Shift & Attendance Summary</h3>
+                  <p style="font-size: 12px; color: var(--gray-500); margin-bottom: 14px;">Detailed biometric and web shift punch logs, work durations, and status records.</p>
+                  <button class="btn btn-secondary btn-sm" onclick="exportReport('attendance')">Download Register (.CSV)</button>
+                </div>
+
+                <div style="border: 1px solid var(--gray-200); border-radius: var(--radius-md); padding: 18px; background: #FCFCFD;">
+                  <h3 style="font-size: 14px; font-weight: 700; color: var(--charcoal-800); margin-bottom: 6px;">Payroll & Statutory Register</h3>
+                  <p style="font-size: 12px; color: var(--gray-500); margin-bottom: 14px;">Detailed wage sheets, provident fund, ESI deductions, professional tax, and net disbursements.</p>
+                  <button class="btn btn-secondary btn-sm" onclick="exportReport('payroll')">Download Register (.CSV)</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: SALARY SLIP -->
+  <div class="modal-overlay" id="modal-salary-slip">
+    <div class="modal-container modal-lg">
+      <div class="modal-header">
+        <h3>Official Salary Slip – NCL Industries Limited</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-salary-slip')">&times;</button>
+      </div>
+      <div class="modal-body" id="salary-slip-content-body"></div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-salary-slip')">Close</button>
+        <button class="btn btn-primary" onclick="window.print()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+          <span>Print / Save PDF</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ENROLL EMPLOYEE -->
+  <div class="modal-overlay" id="modal-add-employee">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Enroll New Employee – NCL Industries Limited</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-add-employee')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-add-employee" onsubmit="submitNewEmployee(event)">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input type="text" name="full_name" class="form-control" required placeholder="e.g. Suresh Kumar">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Official Email *</label>
+              <input type="email" name="email" class="form-control" required placeholder="s.kumar@nclind.com">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Phone Number *</label>
+              <input type="text" name="phone" class="form-control" required placeholder="+91 98490 12345">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Designation *</label>
+              <input type="text" name="designation" class="form-control" required placeholder="e.g. Mechanical Engineer">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Department *</label>
+              <select name="department" class="form-select" required>
+                <option value="Production & Kiln Operations">Production & Kiln Operations</option>
+                <option value="Plant Engineering">Plant Engineering</option>
+                <option value="Quality Control">Quality Control</option>
+                <option value="Supply Chain">Supply Chain</option>
+                <option value="Health, Safety & Environment">Health, Safety & Environment</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Finance & Accounts">Finance & Accounts</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Industrial Division *</label>
+              <select name="division" class="form-select" required>
+                <option value="Cement (Nagarjuna)">Cement (Nagarjuna)</option>
+                <option value="Bison Panel (Particle Board)">Bison Panel</option>
+                <option value="Prefab Systems">Prefab Structural Systems</option>
+                <option value="Doors & Windows">Doors & Windows</option>
+                <option value="Corporate">Corporate Headquarters</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Plant / Location *</label>
+              <select name="location" class="form-select" required>
+                <option value="Hyderabad Corporate Office">Hyderabad Corporate Office</option>
+                <option value="Mattampally Plant, Nalgonda">Mattampally Plant, Nalgonda</option>
+                <option value="Kondapalli Plant, Vijayawada">Kondapalli Plant, Vijayawada</option>
+                <option value="Tirupati Plant">Tirupati Plant</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Monthly Gross CTC (INR) *</label>
+              <input type="number" name="salary" class="form-control" required value="65000">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">System Role *</label>
+              <select name="role" class="form-select" required>
+                <option value="employee">Employee</option>
+                <option value="manager">Manager</option>
+                <option value="hr">HR Specialist</option>
+                <option value="admin">Administrator</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Initial Password</label>
+              <input type="text" name="password" class="form-control" value="emp123">
+            </div>
+          </div>
+          <div class="modal-footer" style="padding: 12px 0 0 0; margin-top: 10px;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-employee')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Enroll in NCL EMS</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: APPLY LEAVE -->
+  <div class="modal-overlay" id="modal-apply-leave">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Apply For Leave – NCL Industries Limited</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-apply-leave')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-apply-leave" onsubmit="submitLeaveApplication(event)">
+          <div class="form-group">
+            <label class="form-label">Leave Category *</label>
+            <select name="leave_type" class="form-select" required>
+              <option value="Casual Leave">Casual Leave (CL)</option>
+              <option value="Sick Leave">Sick Leave (SL)</option>
+              <option value="Earned Leave">Earned Leave (EL)</option>
+              <option value="Maternity/Paternity">Maternity / Paternity Leave</option>
+            </select>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Start Date *</label>
+              <input type="date" name="start_date" id="leave-start-date" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">End Date *</label>
+              <input type="date" name="end_date" id="leave-end-date" class="form-control" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reason for Leave *</label>
+            <textarea name="reason" class="form-control" rows="3" required placeholder="Specify purpose of leave..."></textarea>
+          </div>
+          <div class="modal-footer" style="padding: 12px 0 0 0;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-apply-leave')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit for Approval</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PERFORMANCE REVIEW -->
+  <div class="modal-overlay" id="modal-add-review">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Submit Performance Evaluation</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-add-review')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-add-review" onsubmit="submitPerformanceReview(event)">
+          <div class="form-group">
+            <label class="form-label">Select Employee *</label>
+            <select name="employee_id" id="review-emp-select" class="form-select" required></select>
+          </div>
+          <div class="form-grid-3">
+            <div class="form-group">
+              <label class="form-label">Review Period *</label>
+              <input type="text" name="review_period" class="form-control" value="FY 2026-27 Q1" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Rating (1.0 to 5.0) *</label>
+              <input type="number" step="0.1" min="1" max="5" name="rating" class="form-control" value="4.5" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">KPI Score (0-100%) *</label>
+              <input type="number" min="0" max="100" name="kpi_score" class="form-control" value="90" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Key Strengths & Achievements</label>
+            <textarea name="strengths" class="form-control" rows="2" placeholder="Contributions to plant operations or goals..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Development Feedback</label>
+            <textarea name="feedback" class="form-control" rows="2" placeholder="Overall appraisal remarks..."></textarea>
+          </div>
+          <div class="modal-footer" style="padding: 12px 0 0 0;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-review')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Submit Review</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ANNOUNCEMENT -->
+  <div class="modal-overlay" id="modal-new-announcement">
+    <div class="modal-container">
+      <div class="modal-header">
+        <h3>Publish Corporate Announcement</h3>
+        <button class="modal-close-btn" onclick="closeModal('modal-new-announcement')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="form-new-announcement" onsubmit="submitNewAnnouncement(event)">
+          <div class="form-group">
+            <label class="form-label">Notice Title *</label>
+            <input type="text" name="title" class="form-control" required placeholder="e.g. Nagarjuna Cement Maintenance Schedule">
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Priority Level</label>
+              <select name="priority" class="form-select">
+                <option value="Normal">Normal</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent Alert</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Division</label>
+              <select name="division" class="form-select">
+                <option value="Corporate">Corporate</option>
+                <option value="Cement (Nagarjuna)">Cement (Nagarjuna)</option>
+                <option value="Bison Panel">Bison Panel</option>
+                <option value="Prefab Systems">Prefab Systems</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Notice Content *</label>
+            <textarea name="content" class="form-control" rows="4" required placeholder="Detailed notice text..."></textarea>
+          </div>
+          <div class="modal-footer" style="padding: 12px 0 0 0;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-new-announcement')">Cancel</button>
+            <button type="submit" class="btn btn-primary">Publish to NCL Portal</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- =========================================================================
+       COMPLETE STANDALONE DATABASE & CLIENT-SIDE LOGIC
+       Runs normally anywhere (double-click index.html or through web server)
+       ========================================================================= -->
+  <script>
+    const COMPANY_NAME = "NCL Industries Limited";
+    const SYSTEM_TITLE = "NCL Industries Limited – Employee Management System (EMS)";
+    const TAGLINE = "Empowering People. Enhancing Performance.";
+
+    // Default Seed Data
+    const INITIAL_EMPLOYEES = [
+      { id: 1, employee_id: "NCL-1001", username: "admin", role: "admin", full_name: "Rajendra Prasad Varma", email: "r.varma@nclind.com", phone: "+91 98490 12001", designation: "Chief Executive Officer & Administrator", department: "Executive Management", division: "Corporate", location: "Hyderabad Corporate Office", joining_date: "2018-04-01", salary: 320000.0, bank_account: "HDFC00018429910", pan_no: "ABCPV9012A", uan_no: "100984920192", status: "Active" },
+      { id: 2, employee_id: "NCL-1002", username: "hr", role: "hr", full_name: "Sunita Chandrasekhar", email: "s.chandrasekhar@nclind.com", phone: "+91 98490 12002", designation: "Head - Human Capital & Industrial Relations", department: "Human Resources", division: "Corporate", location: "Hyderabad Corporate Office", joining_date: "2019-06-15", salary: 185000.0, bank_account: "ICIC00029381920", pan_no: "BCKPS4821B", uan_no: "100984920193", status: "Active" },
+      { id: 3, employee_id: "NCL-1003", username: "manager", role: "manager", full_name: "K. Venkata Ramana", email: "kv.ramana@nclind.com", phone: "+91 98490 12003", designation: "General Manager - Plant Operations", department: "Plant Engineering", division: "Cement (Nagarjuna)", location: "Mattampally Plant, Nalgonda", joining_date: "2017-02-10", salary: 195000.0, bank_account: "SBIN00049281729", pan_no: "CLKPR3910C", uan_no: "100984920194", status: "Active" },
+      { id: 4, employee_id: "NCL-1004", username: "employee", role: "employee", full_name: "Arun Kumar Sharma", email: "a.sharma@nclind.com", phone: "+91 98490 12004", designation: "Senior Process Control Engineer", department: "Production & Kiln Operations", division: "Cement (Nagarjuna)", location: "Mattampally Plant, Nalgonda", joining_date: "2021-08-01", salary: 95000.0, bank_account: "AXIS00091823741", pan_no: "DLKPS1982D", uan_no: "100984920195", status: "Active" },
+      { id: 5, employee_id: "NCL-1005", username: "priya_nair", role: "employee", full_name: "Priya Nair", email: "p.nair@nclind.com", phone: "+91 98490 12005", designation: "Quality Assurance Lead - Bison Panels", department: "Quality Control", division: "Bison Panel (Particle Board)", location: "Kondapalli Plant, Vijayawada", joining_date: "2022-01-17", salary: 88000.0, bank_account: "HDFC00091820491", pan_no: "EMKPN2910E", uan_no: "100984920196", status: "Active" },
+      { id: 6, employee_id: "NCL-1006", username: "ramesh_patel", role: "manager", full_name: "Ramesh Babu Patel", email: "rb.patel@nclind.com", phone: "+91 98490 12006", designation: "Operations Manager - Building Products", department: "Prefab & Ready-Mix", division: "Prefab Systems", location: "Tirupati Plant", joining_date: "2018-11-20", salary: 165000.0, bank_account: "ICIC00038291029", pan_no: "FPKPR8291F", uan_no: "100984920197", status: "Active" },
+      { id: 7, employee_id: "NCL-1007", username: "deepa_rao", role: "employee", full_name: "Deepa Mohan Rao", email: "d.rao@nclind.com", phone: "+91 98490 12007", designation: "Supply Chain & Logistics Specialist", department: "Supply Chain", division: "Corporate", location: "Hyderabad Corporate Office", joining_date: "2023-03-01", salary: 78000.0, bank_account: "SBIN00082739182", pan_no: "GMKPS9281G", uan_no: "100984920198", status: "Active" },
+      { id: 8, employee_id: "NCL-1008", username: "vikram_reddy", role: "employee", full_name: "Vikram Reddy", email: "v.reddy@nclind.com", phone: "+91 98490 12008", designation: "Industrial Safety & EHS Officer", department: "Health, Safety & Environment", division: "Cement (Nagarjuna)", location: "Mattampally Plant, Nalgonda", joining_date: "2020-10-12", salary: 82000.0, bank_account: "KOTK00019283746", pan_no: "HMKPV1928H", uan_no: "100984920199", status: "Active" },
+      { id: 9, employee_id: "NCL-1009", username: "anita_deshmukh", role: "hr", full_name: "Anita Deshmukh", email: "a.deshmukh@nclind.com", phone: "+91 98490 12009", designation: "Senior HR Specialist - Talent Acquisition", department: "Human Resources", division: "Corporate", location: "Hyderabad Corporate Office", joining_date: "2022-07-05", salary: 85000.0, bank_account: "HDFC00049281029", pan_no: "IMKPD3928I", uan_no: "100984920200", status: "Active" },
+      { id: 10, employee_id: "NCL-1010", username: "ks_reddy", role: "employee", full_name: "K. Suresh Reddy", email: "ks.reddy@nclind.com", phone: "+91 98490 12010", designation: "Assistant Plant Manager - Kiln Section", department: "Production & Kiln Operations", division: "Cement (Nagarjuna)", location: "Mattampally Plant, Nalgonda", joining_date: "2026-10-29", salary: 125000.0, bank_account: "HDFC00091823749", pan_no: "JMKPR4829K", uan_no: "100984920201", status: "Active" }
+    ];
+
+    const INITIAL_ANNOUNCEMENTS = [
+      { id: 1, title: "NCL Industries Limited - FY 2026-27 Safety & Production Milestone", content: "All personnel across Nagarjuna Cement and Bison Panel units are commended for achieving 1.2M Safe Man-Hours without LTI. Strict adherence to ISO 45001 safety protocols remains paramount.", priority: "High", author_name: "Sunita Chandrasekhar (Head - HR)", division: "Corporate", created_at: "2026-10-28" },
+      { id: 2, title: "Bison Panel Division - Modernization & Capacity Expansion", content: "Installation of high-speed cement bonded particle board pressing machinery at our Kondapalli plant is scheduled. Specialized shift rotations apply.", priority: "Normal", author_name: "K. Venkata Ramana (GM Plant)", division: "Bison Panel", created_at: "2026-10-25" },
+      { id: 3, title: "Annual Performance Appraisal Cycle FY 2025-26", content: "The Annual Appraisal window is open in NCL EMS. All Reporting Managers are requested to finalize quarterly KPI scores and reviews.", priority: "Urgent", author_name: "Sunita Chandrasekhar (Head - HR)", division: "Corporate", created_at: "2026-10-24" },
+      { id: 4, title: "NCL Nagarjuna Cement - Quality Benchmarking Award 2026", content: "NCL Industries Limited has received the National Industrial Excellence Award for OPC 53 Grade high-durability cement formulations.", priority: "Normal", author_name: "Rajendra Prasad Varma (CEO)", division: "Cement (Nagarjuna)", created_at: "2026-10-20" }
+    ];
+
+    const INITIAL_LEAVES = [
+      { id: 1, employee_id: "NCL-1004", full_name: "Arun Kumar Sharma", department: "Production & Kiln Operations", leave_type: "Casual Leave", start_date: "2026-11-05", end_date: "2026-11-06", total_days: 2, reason: "Family event in Vijayawada", status: "Pending", reviewed_by: null, reviewed_at: null },
+      { id: 2, employee_id: "NCL-1005", full_name: "Priya Nair", department: "Quality Control", leave_type: "Earned Leave", start_date: "2026-10-18", end_date: "2026-10-22", total_days: 5, reason: "Annual leave", status: "Approved", reviewed_by: "K. Venkata Ramana", reviewed_at: "2026-10-15" },
+      { id: 3, employee_id: "NCL-1007", full_name: "Deepa Mohan Rao", department: "Supply Chain", leave_type: "Sick Leave", start_date: "2026-10-25", end_date: "2026-10-26", total_days: 2, reason: "Physician prescribed rest", status: "Approved", reviewed_by: "Sunita Chandrasekhar", reviewed_at: "2026-10-25" },
+      { id: 4, employee_id: "NCL-1008", full_name: "Vikram Reddy", department: "Health, Safety & Environment", leave_type: "Casual Leave", start_date: "2026-11-10", end_date: "2026-11-11", total_days: 2, reason: "Personal domestic work", status: "Pending", reviewed_by: null, reviewed_at: null }
+    ];
+
+    const INITIAL_PERFORMANCE = [
+      { id: 1, employee_id: "NCL-1004", full_name: "Arun Kumar Sharma", division: "Cement (Nagarjuna)", review_period: "FY 2025-26 Q3", rating: 4.8, kpi_score: 96, reviewer_name: "K. Venkata Ramana", strengths: "Exceptional process control at Kiln-3, reducing energy by 4.2%.", feedback: "Outstanding contributor to Nagarjuna Cement operations." },
+      { id: 2, employee_id: "NCL-1005", full_name: "Priya Nair", division: "Bison Panel (Particle Board)", review_period: "FY 2025-26 Q3", rating: 4.6, kpi_score: 92, reviewer_name: "Ramesh Babu Patel", strengths: "High precision in Bison panel tensile strength and moisture-resistance testing.", feedback: "Reliable quality gatekeeper for building products." },
+      { id: 3, employee_id: "NCL-1007", full_name: "Deepa Mohan Rao", division: "Corporate", review_period: "FY 2025-26 Q3", rating: 4.4, kpi_score: 88, reviewer_name: "Sunita Chandrasekhar", strengths: "Streamlined outbound freight dispatch routes, optimizing fleet turnaround by 14%.", feedback: "Valuable logistics coordinator at corporate HQ." }
+    ];
+
+    // Persistence Layer (LocalStorage)
+    function getStore(key, defaultVal) {
+      const data = localStorage.getItem("ncl_ems_" + key);
+      if (!data) {
+        localStorage.setItem("ncl_ems_" + key, JSON.stringify(defaultVal));
+        return defaultVal;
+      }
+      try { return JSON.parse(data); } catch(e) { return defaultVal; }
+    }
+
+    function setStore(key, val) {
+      localStorage.setItem("ncl_ems_" + key, JSON.stringify(val));
+    }
+
+    // App State
+    let employees = getStore("employees", INITIAL_EMPLOYEES);
+    let announcements = getStore("announcements", INITIAL_ANNOUNCEMENTS);
+    let leaves = getStore("leaves", INITIAL_LEAVES);
+    let performanceReviews = getStore("performance", INITIAL_PERFORMANCE);
+    let attendance = getStore("attendance", generateInitialAttendance());
+    let payroll = getStore("payroll", generateInitialPayroll());
+    let currentUser = getStore("currentUser", null);
+
+    function generateInitialAttendance() {
+      const list = [];
+      const today = new Date().toISOString().split("T")[0];
+      employees.forEach((emp, i) => {
+        let status = "Present";
+        let check_in = "08:55";
+        let check_out = null;
+        if (i === 6) { status = "Late"; check_in = "09:35"; }
+        if (i === 7) { status = "On Leave"; check_in = "-"; }
+        list.push({
+          id: i + 1,
+          employee_id: emp.employee_id,
+          full_name: emp.full_name,
+          division: emp.division,
+          designation: emp.designation,
+          date: today,
+          shift: "General (09:00 - 18:00)",
+          check_in: check_in,
+          check_out: check_out,
+          work_hours: status === "Present" ? 5.5 : (status === "Late" ? 4.8 : 0),
+          status: status,
+          remarks: status === "Late" ? "Traffic Delay" : (status === "On Leave" ? "Approved Leave" : "Regular Shift")
+        });
+      });
+      return list;
+    }
+
+    function generateInitialPayroll() {
+      const list = [];
+      employees.forEach((emp, i) => {
+        const gross = emp.salary;
+        const basic = Math.round(gross * 0.50);
+        const hra = Math.round(gross * 0.25);
+        const conveyance = Math.round(Math.min(gross * 0.08, 15000));
+        const special = Math.round(gross - (basic + hra + conveyance));
+        const pf = Math.round(Math.min(basic * 0.12, 19200));
+        const esi = gross <= 21000 ? Math.round(gross * 0.0075) : 0;
+        const pt = gross > 20000 ? 2500 : 1500;
+        const tds = gross > 150000 ? Math.round(gross * 0.15) : (gross > 75000 ? Math.round(gross * 0.08) : 0);
+        const total_ded = pf + esi + pt + tds;
+        const net_pay = gross - total_ded;
+
+        list.push({
+          id: i + 1,
+          slip_number: `NCL-PAY-202610-${String(i+1).padStart(3, '0')}`,
+          employee_id: emp.employee_id,
+          full_name: emp.full_name,
+          designation: emp.designation,
+          department: emp.department,
+          division: emp.division,
+          location: emp.location,
+          pan_no: emp.pan_no || "ABCDE1234F",
+          uan_no: emp.uan_no || "100984920192",
+          bank_account: emp.bank_account || "HDFC00018429910",
+          month: "October",
+          year: 2026,
+          basic_salary: basic,
+          hra: hra,
+          conveyance: conveyance,
+          special_allowance: special,
+          gross_salary: gross,
+          pf_deduction: pf,
+          esi_deduction: esi,
+          professional_tax: pt,
+          tds_deduction: tds,
+          total_deductions: total_ded,
+          net_salary: net_pay,
+          payment_status: "Paid",
+          payment_date: "2026-10-31",
+          payment_method: "Direct Electronic Transfer"
+        });
+      });
+      return list;
+    }
+
+    // Initialize application
+    document.addEventListener("DOMContentLoaded", () => {
+      initLiveClock();
+      setupDatePickers();
+      if (!currentUser) {
+        showLoginModal();
+      } else {
+        hideLoginModal();
+        applyUserRoleUI();
+        renderAllViews();
+      }
+    });
+
+    function initLiveClock() {
+      const clockEl = document.getElementById("live-clock-display");
+      if (!clockEl) return;
+      const update = () => {
+        clockEl.innerText = new Date().toLocaleTimeString('en-IN', { hour12: false });
+      };
+      update();
+      setInterval(update, 1000);
+    }
+
+    function setupDatePickers() {
+      const today = new Date().toISOString().split("T")[0];
+      const attDate = document.getElementById("att-date-picker");
+      if (attDate) attDate.value = today;
+      const lStart = document.getElementById("leave-start-date");
+      const lEnd = document.getElementById("leave-end-date");
+      if (lStart) lStart.value = today;
+      if (lEnd) lEnd.value = today;
+    }
+
+    // Authentication Handlers
+    function quickFillRole(role, pwd) {
+      document.getElementById("login-username").value = role;
+      document.getElementById("login-password").value = pwd;
+    }
+
+    function showLoginModal() {
+      document.getElementById("login-modal-overlay").style.display = "flex";
+    }
+
+    function hideLoginModal() {
+      document.getElementById("login-modal-overlay").style.display = "none";
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById("login-username").value.trim().toLowerCase();
+      const p = document.getElementById("login-password").value.trim();
+
+      const found = employees.find(emp => 
+        (emp.username.toLowerCase() === u || emp.employee_id.toLowerCase() === u || emp.email.toLowerCase() === u)
+      );
+
+      if (found) {
+        currentUser = found;
+        setStore("currentUser", currentUser);
+        showToast(`Welcome back, ${currentUser.full_name} (${COMPANY_NAME})`, "success");
+        hideLoginModal();
+        applyUserRoleUI();
+        renderAllViews();
+      } else {
+        showToast("Invalid credentials. Try demo logins: admin, hr, manager, or employee.", "error");
+      }
+    }
+
+    function logoutUser() {
+      currentUser = null;
+      localStorage.removeItem("ncl_ems_currentUser");
+      showToast("Logged out from NCL Industries Limited EMS", "info");
+      showLoginModal();
+    }
+
+    function applyUserRoleUI() {
+      if (!currentUser) return;
+      document.getElementById("sidebar-user-name").innerText = currentUser.full_name;
+      document.getElementById("sidebar-user-role").innerText = `${currentUser.designation} (${currentUser.role.toUpperCase()})`;
+      document.getElementById("sidebar-user-avatar").innerText = getInitials(currentUser.full_name);
+      document.getElementById("header-unit-label").innerText = `${currentUser.division} • ${currentUser.location}`;
+      document.getElementById("dash-welcome-text").innerText = `Welcome, ${currentUser.full_name} – NCL Industries Limited`;
+
+      const isAdminOrHR = (currentUser.role === 'admin' || currentUser.role === 'hr');
+      const isManagerOrAbove = (isAdminOrHR || currentUser.role === 'manager');
+
+      const addBtn = document.getElementById("btn-add-employee");
+      if (addBtn) addBtn.style.display = isAdminOrHR ? "inline-flex" : "none";
+      const payBtn = document.getElementById("btn-generate-payroll");
+      if (payBtn) payBtn.style.display = isAdminOrHR ? "inline-flex" : "none";
+      const revBtn = document.getElementById("btn-add-review");
+      if (revBtn) revBtn.style.display = isManagerOrAbove ? "inline-flex" : "none";
+      const ancBtn = document.getElementById("btn-create-announcement");
+      if (ancBtn) ancBtn.style.display = isAdminOrHR ? "inline-flex" : "none";
+    }
+
+    function switchView(viewName) {
+      document.querySelectorAll(".sidebar-nav .nav-item").forEach(item => {
+        item.classList.toggle("active", item.getAttribute("data-view") === viewName);
+      });
+      document.querySelectorAll(".view-panel").forEach(panel => {
+        panel.classList.remove("active");
+      });
+      const target = document.getElementById(`view-${viewName}`);
+      if (target) target.classList.add("active");
+      document.getElementById("app-sidebar").classList.remove("mobile-open");
+    }
+
+    function toggleMobileSidebar() {
+      document.getElementById("app-sidebar").classList.toggle("mobile-open");
+    }
+
+    function renderAllViews() {
+      renderDashboard();
+      renderEmployeesTable(employees);
+      populateDropdowns();
+      renderAttendance();
+      renderLeaves();
+      renderPayroll();
+      renderSelectedIdCard();
+      renderPerformance();
+      renderAnnouncements();
+    }
+
+    // Dashboard Rendering
+    function renderDashboard() {
+      document.getElementById("stat-total-emp").innerText = employees.length;
+      const today = new Date().toISOString().split("T")[0];
+      const todayAtt = attendance.filter(a => a.date === today);
+      const presentCount = todayAtt.filter(a => a.status === "Present" || a.status === "Late").length;
+      document.getElementById("stat-present-today").innerText = presentCount || 7;
+      
+      const pendingLeaves = leaves.filter(l => l.status === "Pending").length;
+      document.getElementById("stat-pending-leaves").innerText = pendingLeaves;
+      document.getElementById("sidebar-leave-badge").innerText = pendingLeaves;
+
+      const totalMonthly = payroll.reduce((acc, p) => acc + (p.net_salary || 0), 0);
+      document.getElementById("stat-monthly-payroll").innerText = `₹ ${totalMonthly.toLocaleString('en-IN')}`;
+
+      // Division Breakdown
+      const divCounts = {};
+      employees.forEach(e => { divCounts[e.division] = (divCounts[e.division] || 0) + 1; });
+      const divContainer = document.getElementById("dash-divisions-breakdown");
+      if (divContainer) {
+        divContainer.innerHTML = Object.entries(divCounts).map(([div, count]) => `
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px;">
+            <span style="font-weight: 600; color: var(--charcoal-700);">${div}</span>
+            <span style="font-weight: 700; background: var(--gray-100); padding: 2px 10px; border-radius: 12px; border: 1px solid var(--gray-200);">${count} staff</span>
+          </div>
+        `).join("");
+      }
+
+      // Recent Announcements
+      const annList = document.getElementById("dash-announcements-list");
+      if (annList) {
+        annList.innerHTML = announcements.slice(0, 3).map(a => `
+          <div style="border-bottom: 1px solid var(--gray-200); padding: 12px 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+              <span style="font-weight: 700; font-size: 13.5px; color: var(--charcoal-900);">${a.title}</span>
+              <span class="status-pill ${a.priority === 'Urgent' ? 'absent' : (a.priority === 'High' ? 'late' : 'halfday')}">${a.priority}</span>
+            </div>
+            <p style="font-size: 12px; color: var(--gray-600); line-height: 1.4;">${a.content.substring(0, 140)}...</p>
+            <div style="font-size: 10.5px; color: var(--gray-400); margin-top: 4px;">${a.author_name} • ${a.division}</div>
+          </div>
+        `).join("");
+      }
+
+      // Quick Attendance table
+      const tbody = document.querySelector("#dash-attendance-table tbody");
+      if (tbody) {
+        tbody.innerHTML = attendance.slice(0, 6).map(r => `
+          <tr>
+            <td><strong>${r.employee_id}</strong></td>
+            <td>${r.full_name}</td>
+            <td>${r.division}</td>
+            <td>${r.designation}</td>
+            <td>${r.check_in || "-"}</td>
+            <td><span class="status-pill ${r.status.toLowerCase().replace(' ', '')}">${r.status}</span></td>
+          </tr>
+        `).join("");
+      }
+
+      // Punch buttons
+      if (currentUser) {
+        const myPunch = attendance.find(a => a.employee_id === currentUser.employee_id && a.date === today);
+        const btnIn = document.getElementById("btn-quick-clockin");
+        const btnOut = document.getElementById("btn-quick-clockout");
+        if (myPunch && myPunch.check_in && !myPunch.check_out) {
+          btnIn.style.display = "none";
+          btnOut.style.display = "inline-flex";
+        } else {
+          btnIn.style.display = "inline-flex";
+          btnOut.style.display = "none";
+        }
+      }
+    }
+
+    // Employees Directory
+    function renderEmployeesTable(list) {
+      const tbody = document.querySelector("#employees-table tbody");
+      const badge = document.getElementById("emp-count-badge");
+      if (badge) badge.innerText = `${list.length} Personnel`;
+      if (!tbody) return;
+
+      tbody.innerHTML = list.map(emp => `
+        <tr>
+          <td><span class="badge" style="background: var(--charcoal-800); color: white; padding: 3px 6px; border-radius: 4px; font-size: 11px;">${emp.employee_id}</span></td>
+          <td>
+            <div style="font-weight: 700; color: var(--charcoal-900);">${emp.full_name}</div>
+            <div style="font-size: 11px; color: var(--gray-500);">${emp.email}</div>
+          </td>
+          <td>
+            <div style="font-weight: 600;">${emp.division}</div>
+            <div style="font-size: 11px; color: var(--gray-500);">${emp.location}</div>
+          </td>
+          <td>
+            <div>${emp.designation}</div>
+            <div style="font-size: 11px; color: var(--gray-500);">${emp.department}</div>
+          </td>
+          <td>${emp.phone}</td>
+          <td><strong>₹ ${emp.salary.toLocaleString('en-IN')}</strong></td>
+          <td><span class="status-pill ${emp.status === 'Active' ? 'active' : 'resigned'}">${emp.status}</span></td>
+          <td>
+            <button class="btn btn-outline btn-sm" onclick="showEmployeeBadge('${emp.employee_id}')">ID Badge</button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function filterEmployees() {
+      const q = document.getElementById("emp-search-input").value.toLowerCase();
+      const dept = document.getElementById("emp-dept-filter").value;
+      const filtered = employees.filter(e => {
+        const matchQ = !q || e.full_name.toLowerCase().includes(q) || e.employee_id.toLowerCase().includes(q) || e.designation.toLowerCase().includes(q);
+        const matchDept = !dept || e.department === dept;
+        return matchQ && matchDept;
+      });
+      renderEmployeesTable(filtered);
+    }
+
+    function populateDropdowns() {
+      const idSel = document.getElementById("id-card-selector");
+      if (idSel) {
+        idSel.innerHTML = employees.map(e => `
+          <option value="${e.employee_id}">${e.employee_id} – ${e.full_name} (${e.division})</option>
+        `).join("");
+      }
+      const revSel = document.getElementById("review-emp-select");
+      if (revSel) {
+        revSel.innerHTML = employees.map(e => `
+          <option value="${e.employee_id}">${e.employee_id} – ${e.full_name} (${e.designation})</option>
+        `).join("");
+      }
+    }
+
+    // Attendance
+    function renderAttendance() {
+      const tbody = document.querySelector("#full-attendance-table tbody");
+      if (!tbody) return;
+      tbody.innerHTML = attendance.map(a => `
+        <tr>
+          <td>${a.date}</td>
+          <td><strong>${a.employee_id}</strong></td>
+          <td>${a.full_name}</td>
+          <td>${a.division}</td>
+          <td>${a.shift || "General (09:00 - 18:00)"}</td>
+          <td>${a.check_in || "-"}</td>
+          <td>${a.check_out || "-"}</td>
+          <td>${a.work_hours > 0 ? a.work_hours + ' hrs' : '-'}</td>
+          <td><span class="status-pill ${a.status.toLowerCase().replace(' ', '')}">${a.status}</span></td>
+          <td><small style="color: var(--gray-500);">${a.remarks || ""}</small></td>
+        </tr>
+      `).join("");
+    }
+
+    function clockInOut(action) {
+      if (!currentUser) return;
+      const today = new Date().toISOString().split("T")[0];
+      const timeStr = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: false });
+      let myRec = attendance.find(a => a.employee_id === currentUser.employee_id && a.date === today);
+
+      if (action === "in") {
+        if (myRec && myRec.check_in && myRec.check_in !== "-") {
+          showToast("Already checked in today.", "info");
+          return;
+        }
+        if (!myRec) {
+          myRec = {
+            id: attendance.length + 1,
+            employee_id: currentUser.employee_id,
+            full_name: currentUser.full_name,
+            division: currentUser.division,
+            designation: currentUser.designation,
+            date: today,
+            shift: "General (09:00 - 18:00)",
+            check_in: timeStr,
+            check_out: null,
+            work_hours: 0,
+            status: "Present",
+            remarks: "Web Punch Verified"
+          };
+          attendance.unshift(myRec);
+        } else {
+          myRec.check_in = timeStr;
+          myRec.status = "Present";
+        }
+        showToast(`Clocked in at ${timeStr} successfully`, "success");
+      } else {
+        if (!myRec || !myRec.check_in) {
+          showToast("No check-in record found for today.", "error");
+          return;
+        }
+        myRec.check_out = timeStr;
+        myRec.work_hours = 8.5;
+        showToast(`Clocked out at ${timeStr}. Total hours: 8.5 hrs`, "success");
+      }
+
+      setStore("attendance", attendance);
+      renderAttendance();
+      renderDashboard();
+    }
+
+    // Leaves
+    function renderLeaves() {
+      const tbody = document.querySelector("#leaves-table tbody");
+      if (!tbody) return;
+      const canReview = (currentUser && ['admin', 'hr', 'manager'].includes(currentUser.role));
+
+      tbody.innerHTML = leaves.map(l => `
+        <tr>
+          <td>#LV-${l.id}</td>
+          <td>
+            <div style="font-weight: 700;">${l.full_name}</div>
+            <div style="font-size: 11px; color: var(--gray-500);">${l.employee_id} • ${l.department}</div>
+          </td>
+          <td><strong>${l.leave_type}</strong></td>
+          <td>${l.start_date} to ${l.end_date}</td>
+          <td><span class="badge" style="background: var(--gray-200); color: var(--charcoal-800);">${l.total_days} Day(s)</span></td>
+          <td>${l.reason}</td>
+          <td><span class="status-pill ${l.status.toLowerCase()}">${l.status}</span></td>
+          <td>${l.reviewed_by ? `${l.reviewed_by}` : '<span style="color:var(--gray-400)">Pending Review</span>'}</td>
+          <td>
+            ${canReview && l.status === 'Pending' ? `
+              <div style="display: flex; gap: 4px;">
+                <button class="btn btn-success btn-sm" onclick="reviewLeave(${l.id}, 'Approved')">Approve</button>
+                <button class="btn btn-danger btn-sm" onclick="reviewLeave(${l.id}, 'Rejected')">Reject</button>
+              </div>
+            ` : '-'}
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function reviewLeave(leaveId, newStatus) {
+      const target = leaves.find(l => l.id === leaveId);
+      if (target) {
+        target.status = newStatus;
+        target.reviewed_by = currentUser ? currentUser.full_name : "Authorized Manager";
+        target.reviewed_at = new Date().toISOString().split("T")[0];
+        setStore("leaves", leaves);
+        showToast(`Leave application #${leaveId} has been ${newStatus}.`, "success");
+        renderLeaves();
+        renderDashboard();
+      }
+    }
+
+    // Payroll & Slips
+    function renderPayroll() {
+      const tbody = document.querySelector("#payroll-table tbody");
+      if (!tbody) return;
+
+      tbody.innerHTML = payroll.map(p => `
+        <tr>
+          <td><strong>${p.slip_number}</strong></td>
+          <td>${p.employee_id}</td>
+          <td>
+            <div style="font-weight: 700;">${p.full_name}</div>
+            <div style="font-size: 11px; color: var(--gray-500);">${p.division}</div>
+          </td>
+          <td>${p.month} ${p.year}</td>
+          <td>₹ ${p.gross_salary.toLocaleString('en-IN')}</td>
+          <td style="color: var(--danger);">₹ ${p.total_deductions.toLocaleString('en-IN')}</td>
+          <td style="font-weight: 800; color: var(--charcoal-900);">₹ ${p.net_salary.toLocaleString('en-IN')}</td>
+          <td><span class="status-pill paid">${p.payment_status}</span></td>
+          <td>
+            <button class="btn btn-outline-red btn-sm" onclick="viewSalarySlip('${p.slip_number}')">View Payslip</button>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function viewSalarySlip(slipNo) {
+      const s = payroll.find(p => p.slip_number === slipNo);
+      if (!s) return;
+
+      const container = document.getElementById("salary-slip-content-body");
+      container.innerHTML = `
+        <div class="payslip-document">
+          <table class="payslip-header-table">
+            <tr>
+              <td style="width: 70px; vertical-align: top;">
+                <div class="login-badge" style="width: 56px; height: 56px; font-size: 26px;">NCL</div>
+              </td>
+              <td>
+                <div class="payslip-company-title">NCL INDUSTRIES LIMITED</div>
+                <div class="payslip-company-address">
+                  <strong>Corporate & Registered Office:</strong> 7th Floor, NCL Pearl, Near Taj Krishna, Road No. 1, Banjara Hills, Hyderabad – 500034, Telangana, India.<br>
+                  <strong>CIN:</strong> L33130TG1979PLC002521 | <strong>GSTIN:</strong> 36AAACN1979P1Z1 | <strong>Web:</strong> www.nclind.com
+                </div>
+              </td>
+              <td style="text-align: right; vertical-align: top;">
+                <div style="font-size: 11px; font-weight: 700; color: var(--charcoal-800);">CONFIDENTIAL DOCUMENT</div>
+                <div style="font-size: 10px; color: var(--gray-500);">Ref: ${s.slip_number}</div>
+              </td>
+            </tr>
+          </table>
+
+          <div class="payslip-title-banner">
+            PAYSLIP FOR THE MONTH OF ${s.month.toUpperCase()} ${s.year}
+          </div>
+
+          <div class="payslip-info-grid">
+            <div>
+              <div class="info-field"><span class="lbl">Employee Name:</span> <span class="val">${s.full_name}</span></div>
+              <div class="info-field"><span class="lbl">Employee ID:</span> <span class="val">${s.employee_id}</span></div>
+              <div class="info-field"><span class="lbl">Designation:</span> <span class="val">${s.designation}</span></div>
+              <div class="info-field"><span class="lbl">Department:</span> <span class="val">${s.department}</span></div>
+              <div class="info-field"><span class="lbl">Industrial Division:</span> <span class="val">${s.division}</span></div>
+            </div>
+            <div>
+              <div class="info-field"><span class="lbl">Plant / Work Location:</span> <span class="val">${s.location}</span></div>
+              <div class="info-field"><span class="lbl">PAN Number:</span> <span class="val">${s.pan_no}</span></div>
+              <div class="info-field"><span class="lbl">EPF / UAN Number:</span> <span class="val">${s.uan_no}</span></div>
+              <div class="info-field"><span class="lbl">Bank Account:</span> <span class="val">${s.bank_account}</span></div>
+              <div class="info-field"><span class="lbl">Payment Mode:</span> <span class="val">${s.payment_method}</span></div>
+            </div>
+          </div>
+
+          <table class="payslip-breakdown-table">
+            <thead>
+              <tr>
+                <th style="width: 50%;">Earnings (INR)</th>
+                <th style="width: 50%;">Statutory Deductions (INR)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>Basic Salary (50%)</span>
+                    <strong>₹ ${s.basic_salary.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>House Rent Allowance (HRA)</span>
+                    <strong>₹ ${s.hra.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>Conveyance Allowance</span>
+                    <strong>₹ ${s.conveyance.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>Special Industrial Allowance</span>
+                    <strong>₹ ${s.special_allowance.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong>
+                  </div>
+                </td>
+                <td>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>Employees' Provident Fund (EPF)</span>
+                    <strong>₹ ${s.pf_deduction.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>ESI Contribution</span>
+                    <strong>₹ ${s.esi_deduction.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                    <span>Professional Tax (PT)</span>
+                    <strong>₹ ${s.professional_tax.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>Tax Deducted at Source (TDS)</span>
+                    <strong>₹ ${s.tds_deduction.toLocaleString('en-IN', {minimumFractionDigits: 2})}</strong>
+                  </div>
+                </td>
+              </tr>
+              <tr class="payslip-total-row">
+                <td>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>Total Gross Earnings:</span>
+                    <span style="color: var(--charcoal-900);">₹ ${s.gross_salary.toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+                  </div>
+                </td>
+                <td>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span>Total Deductions:</span>
+                    <span style="color: var(--danger);">₹ ${s.total_deductions.toLocaleString('en-IN', {minimumFractionDigits: 2})}</span>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="net-pay-banner">
+            <div>
+              <div style="font-size: 11px; text-transform: uppercase; font-weight: 700; color: var(--charcoal-700);">Net Take-Home Pay (Disbursed)</div>
+              <div style="font-size: 12px; color: var(--gray-600); margin-top: 2px;">Direct Electronic Transfer to ${s.bank_account}</div>
+            </div>
+            <div class="amount">₹ ${s.net_salary.toLocaleString('en-IN', {minimumFractionDigits: 2})}</div>
+          </div>
+
+          <div class="payslip-sign-footer">
+            <div class="payslip-sign-block">
+              <div style="font-style: italic; color: var(--gray-500); margin-bottom: 8px;">Computer Generated Verified Document</div>
+              <div class="payslip-sign-line">Employee Signature</div>
+            </div>
+            <div class="payslip-sign-block">
+              <div style="font-weight: bold; color: var(--primary-red); margin-bottom: 8px;">NCL INDUSTRIES LIMITED</div>
+              <div class="payslip-sign-line">Head of Human Capital / Finance</div>
+            </div>
+          </div>
+        </div>
+      `;
+      openModal("modal-salary-slip");
+    }
+
+    function generateMonthlyPayroll() {
+      if (!confirm("Run monthly automated payroll calculations for all active personnel across NCL Industries Limited?")) return;
+      payroll = generateInitialPayroll();
+      setStore("payroll", payroll);
+      renderPayroll();
+      renderDashboard();
+      showToast("Payroll calculations updated for all active employees.", "success");
+    }
+
+    // ID Badges
+    function showEmployeeBadge(empId) {
+      switchView('idcards');
+      const sel = document.getElementById("id-card-selector");
+      if (sel) {
+        sel.value = empId;
+        renderSelectedIdCard();
+      }
+    }
+
+    function renderSelectedIdCard() {
+      const sel = document.getElementById("id-card-selector");
+      const empId = sel && sel.value ? sel.value : (currentUser ? currentUser.employee_id : "NCL-1004");
+      const emp = employees.find(e => e.employee_id === empId) || employees[0];
+      const stage = document.getElementById("id-card-display-area");
+      if (!stage || !emp) return;
+
+      stage.innerHTML = `
+        <div class="ncl-corporate-badge">
+          <div class="badge-lanyard-slot"></div>
+          <div class="badge-header">
+            <div class="badge-company">NCL INDUSTRIES LIMITED</div>
+            <div class="badge-sub">${emp.division}</div>
+          </div>
+          <div class="badge-photo-area">
+            <div class="badge-avatar-frame">${getInitials(emp.full_name)}</div>
+            <div class="badge-emp-name">${emp.full_name}</div>
+            <div class="badge-emp-designation">${emp.designation}</div>
+            <div class="badge-emp-id-pill">${emp.employee_id}</div>
+          </div>
+          <div class="badge-details-grid">
+            <div class="badge-detail-row"><span class="lbl">Department:</span> <span class="val">${emp.department}</span></div>
+            <div class="badge-detail-row"><span class="lbl">Work Site:</span> <span class="val">${emp.location}</span></div>
+            <div class="badge-detail-row"><span class="lbl">Emergency Contact:</span> <span class="val">${emp.phone}</span></div>
+            <div class="badge-detail-row"><span class="lbl">Blood Group:</span> <span class="val">O +ve</span></div>
+            <div class="badge-detail-row"><span class="lbl">Security Clearance:</span> <span class="val">Level-3 Industrial Plant</span></div>
+          </div>
+          <div class="badge-footer">
+            <div class="badge-barcode">||| | ||||| || ||| ||||</div>
+            <div class="badge-footer-tagline">“Empowering People. Enhancing Performance.”</div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Performance & Announcements
+    function renderPerformance() {
+      const tbody = document.querySelector("#performance-table tbody");
+      if (!tbody) return;
+      tbody.innerHTML = performanceReviews.map(p => `
+        <tr>
+          <td><strong>${p.employee_id}</strong></td>
+          <td>${p.full_name}</td>
+          <td>${p.division}</td>
+          <td><span class="badge" style="background:var(--gray-200); color:var(--charcoal-800);">${p.review_period}</span></td>
+          <td><strong style="color:var(--primary-red);">${p.rating} / 5.0</strong></td>
+          <td><span class="status-pill approved">${p.kpi_score}%</span></td>
+          <td>${p.reviewer_name || "Manager"}</td>
+          <td>
+            <div style="font-weight:600; font-size:12px;">${p.strengths || ""}</div>
+            <div style="font-size:11px; color:var(--gray-500);">${p.feedback || ""}</div>
+          </td>
+        </tr>
+      `).join("");
+    }
+
+    function renderAnnouncements() {
+      const list = document.getElementById("full-announcements-list");
+      if (!list) return;
+      const canDelete = (currentUser && ['admin', 'hr'].includes(currentUser.role));
+
+      list.innerHTML = announcements.map(a => `
+        <div class="card" style="margin-bottom: 16px; border-left: 4px solid var(--primary-red);">
+          <div class="card-body" style="padding: 18px 20px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <span class="status-pill ${a.priority === 'Urgent' ? 'absent' : (a.priority === 'High' ? 'late' : 'halfday')}" style="margin-bottom: 6px;">
+                  ${a.priority} Priority
+                </span>
+                <h3 style="font-size: 16px; font-weight: 800; color: var(--charcoal-900); margin-top: 4px;">${a.title}</h3>
+                <div style="font-size: 11px; color: var(--gray-500); margin-bottom: 12px;">
+                  Published by: <strong>${a.author_name}</strong> • Division: <strong>${a.division}</strong> • ${a.created_at || ''}
+                </div>
+              </div>
+              ${canDelete ? `
+                <button class="btn btn-outline btn-sm" onclick="deleteAnnouncement(${a.id})">&times; Delete</button>
+              ` : ''}
+            </div>
+            <p style="font-size: 13.5px; color: var(--charcoal-800); line-height: 1.6;">${a.content}</p>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function deleteAnnouncement(id) {
+      if (!confirm("Are you sure you want to remove this announcement from the NCL corporate portal?")) return;
+      announcements = announcements.filter(a => a.id !== id);
+      setStore("announcements", announcements);
+      renderAnnouncements();
+      renderDashboard();
+      showToast("Announcement removed.", "info");
+    }
+
+    // Modal Form Submissions
+    function openModal(id) { document.getElementById(id).classList.add("active"); }
+    function closeModal(id) { document.getElementById(id).classList.remove("active"); }
+    function openAddEmployeeModal() { openModal("modal-add-employee"); }
+    function openApplyLeaveModal() { openModal("modal-apply-leave"); }
+    function openAddReviewModal() { openModal("modal-add-review"); }
+    function openNewAnnouncementModal() { openModal("modal-new-announcement"); }
+
+    function submitNewEmployee(e) {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const newId = `NCL-${1000 + employees.length + 1}`;
+      const newEmp = {
+        id: employees.length + 1,
+        employee_id: newId,
+        username: newId.toLowerCase().replace("-", ""),
+        role: fd.get("role") || "employee",
+        full_name: fd.get("full_name"),
+        email: fd.get("email"),
+        phone: fd.get("phone"),
+        designation: fd.get("designation"),
+        department: fd.get("department"),
+        division: fd.get("division"),
+        location: fd.get("location"),
+        joining_date: new Date().toISOString().split("T")[0],
+        salary: parseFloat(fd.get("salary") || 65000),
+        bank_account: "HDFC000" + Math.floor(10000000 + Math.random() * 90000000),
+        pan_no: "ABCDE" + Math.floor(1000 + Math.random() * 9000) + "F",
+        uan_no: "1009849" + Math.floor(10000 + Math.random() * 90000),
+        status: "Active"
+      };
+
+      employees.push(newEmp);
+      setStore("employees", employees);
+      closeModal("modal-add-employee");
+      e.target.reset();
+      renderAllViews();
+      showToast(`Employee ${newId} enrolled successfully in NCL Industries Limited EMS!`, "success");
+    }
+
+    function submitLeaveApplication(e) {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const sDate = fd.get("start_date");
+      const eDate = fd.get("end_date");
+      const days = Math.max(1, Math.round((new Date(eDate) - new Date(sDate)) / (1000*60*60*24)) + 1);
+
+      const newLeave = {
+        id: leaves.length + 1,
+        employee_id: currentUser ? currentUser.employee_id : "NCL-1004",
+        full_name: currentUser ? currentUser.full_name : "Arun Kumar Sharma",
+        department: currentUser ? currentUser.department : "Production & Kiln Operations",
+        leave_type: fd.get("leave_type"),
+        start_date: sDate,
+        end_date: eDate,
+        total_days: days,
+        reason: fd.get("reason"),
+        status: "Pending",
+        reviewed_by: null,
+        reviewed_at: null
+      };
+
+      leaves.unshift(newLeave);
+      setStore("leaves", leaves);
+      closeModal("modal-apply-leave");
+      e.target.reset();
+      renderLeaves();
+      renderDashboard();
+      showToast(`Leave application for ${days} day(s) submitted for approval.`, "success");
+    }
+
+    function submitPerformanceReview(e) {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const empId = fd.get("employee_id");
+      const emp = employees.find(e => e.employee_id === empId);
+
+      const newReview = {
+        id: performanceReviews.length + 1,
+        employee_id: empId,
+        full_name: emp ? emp.full_name : empId,
+        division: emp ? emp.division : "Corporate",
+        review_period: fd.get("review_period"),
+        rating: parseFloat(fd.get("rating")),
+        kpi_score: parseInt(fd.get("kpi_score")),
+        reviewer_name: currentUser ? currentUser.full_name : "General Manager",
+        strengths: fd.get("strengths"),
+        feedback: fd.get("feedback")
+      };
+
+      performanceReviews.unshift(newReview);
+      setStore("performance", performanceReviews);
+      closeModal("modal-add-review");
+      e.target.reset();
+      renderPerformance();
+      showToast("Performance evaluation recorded.", "success");
+    }
+
+    function submitNewAnnouncement(e) {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const newAnn = {
+        id: announcements.length + 1,
+        title: fd.get("title"),
+        content: fd.get("content"),
+        priority: fd.get("priority") || "Normal",
+        division: fd.get("division") || "Corporate",
+        author_name: currentUser ? `${currentUser.full_name} (${currentUser.designation})` : "NCL Corporate Administration",
+        created_at: new Date().toISOString().split("T")[0]
+      };
+
+      announcements.unshift(newAnn);
+      setStore("announcements", announcements);
+      closeModal("modal-new-announcement");
+      e.target.reset();
+      renderAnnouncements();
+      renderDashboard();
+      showToast("Announcement published across NCL portal.", "success");
+    }
+
+    // CSV Report Export (Dynamic File Download)
+    function exportReport(type) {
+      let content = "NCL Industries Limited – Employee Management System (EMS)\nReport: ";
+      let filename = "";
+
+      if (type === "employees") {
+        content += "Master Employee Register\nGenerated: " + new Date().toLocaleString() + "\n\n";
+        content += "Employee ID,Full Name,Email,Phone,Designation,Department,Division,Location,Joining Date,Salary (INR),Status\n";
+        employees.forEach(r => {
+          content += `"${r.employee_id}","${r.full_name}","${r.email}","${r.phone}","${r.designation}","${r.department}","${r.division}","${r.location}","${r.joining_date}",${r.salary},"${r.status}"\n`;
+        });
+        filename = "NCL_Employee_Master_Register.csv";
+      } else if (type === "attendance") {
+        content += "Attendance & Shift Register\nGenerated: " + new Date().toLocaleString() + "\n\n";
+        content += "Date,Employee ID,Employee Name,Department,Division,Check In,Check Out,Work Hours,Status,Remarks\n";
+        attendance.forEach(r => {
+          content += `"${r.date}","${r.employee_id}","${r.full_name}","${r.department || ''}","${r.division}","${r.check_in || '-'}","${r.check_out || '-'}","${r.work_hours}","${r.status}","${r.remarks || ''}"\n`;
+        });
+        filename = "NCL_Attendance_Register.csv";
+      } else {
+        content += "Payroll Disbursement Register\nGenerated: " + new Date().toLocaleString() + "\n\n";
+        content += "Slip No,Employee ID,Employee Name,Month,Year,Gross Salary (INR),Deductions (INR),Net Salary (INR),Status,Payment Date\n";
+        payroll.forEach(r => {
+          content += `"${r.slip_number}","${r.employee_id}","${r.full_name}","${r.month}",${r.year},${r.gross_salary},${r.total_deductions},${r.net_salary},"${r.payment_status}","${r.payment_date}"\n`;
+        });
+        filename = "NCL_Payroll_Register.csv";
+      }
+
+      const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast(`Downloading official NCL register (${filename})...`, "info");
+    }
+
+    function getInitials(name) {
+      if (!name) return "NC";
+      const parts = name.trim().split(" ");
+      if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+      return name.substring(0, 2).toUpperCase();
+    }
+
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toast-container");
+      if (!container) return;
+      const toast = document.createElement("div");
+      toast.className = `toast toast-${type}`;
+      toast.innerHTML = `<span>${message}</span>`;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transition = "opacity 0.3s ease";
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+  </script>
+</body>
+</html>
